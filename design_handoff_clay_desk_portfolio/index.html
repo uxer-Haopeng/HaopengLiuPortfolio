@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Clay Workdesk · Portfolio</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="portfolio.css" />
+
+<style>
+  :root { color-scheme: light; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #efe7df; }
+  #scene { position: fixed; inset: 0; display: block; touch-action: none; }
+  #loading {
+    position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 14px; background: #efe7df; z-index: 50;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    color: #8a7f73; letter-spacing: 0.16em; font-size: 12px; text-transform: uppercase;
+    transition: opacity 0.7s ease; pointer-events: none;
+  }
+  #loading.hidden { opacity: 0; }
+  .spinner {
+    width: 30px; height: 30px; border-radius: 50%;
+    border: 2px solid #d8cdbf; border-top-color: #8a7f73;
+    animation: spin 0.9s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* orbit hint */
+  #hint {
+    position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: #9b9084; background: rgba(255,255,255,0.55); backdrop-filter: blur(8px);
+    padding: 8px 16px; border-radius: 999px; z-index: 20;
+    border: 1px solid rgba(160,148,132,0.18);
+    transition: opacity 0.6s ease; pointer-events: none;
+  }
+  #hint.hidden { opacity: 0; }
+
+  /* scroll-to-enter affordance */
+  #enterCue {
+    position: fixed; left: 50%; bottom: 64px; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    z-index: 20; pointer-events: none; transition: opacity 0.5s ease;
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #8d8174;
+  }
+  #enterCue.hidden { opacity: 0; }
+  #enterCue .chev {
+    width: 16px; height: 16px; border-right: 2px solid #b0a290; border-bottom: 2px solid #b0a290;
+    transform: rotate(45deg); animation: nudge 1.6s ease-in-out infinite;
+  }
+  @keyframes nudge {
+    0%, 100% { transform: rotate(45deg) translate(-2px, -2px); opacity: 0.35; }
+    50% { transform: rotate(45deg) translate(2px, 2px); opacity: 1; }
+  }
+</style>
+
+<!-- Tweaks (React) -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<!-- Three.js -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+  <canvas id="scene"></canvas>
+
+  <div id="enterCue"><span>scroll to enter</span><span class="chev"></span></div>
+  <div id="hint">drag to orbit · scroll to enter</div>
+  <div id="loading"><div class="spinner"></div><div>sculpting the desk…</div></div>
+
+  <!-- =========================================================
+       PORTFOLIO — revealed by diving into the monitor screen
+       ========================================================= -->
+  <main id="portfolio" data-screen-label="Portfolio">
+    <header class="pf-nav">
+      <button id="backToDesk" class="pf-back">← Back to desk</button>
+      <nav class="pf-links">
+        <a href="#work" class="pf-keep">Work</a>
+        <a href="#about">About</a>
+        <a href="#contact" class="pf-keep">Contact</a>
+      </nav>
+    </header>
+
+    <section class="pf-hero pf-wrap" data-screen-label="Portfolio · Hero">
+      <p class="pf-eyebrow pf-mono">UX / Product Designer · Portfolio</p>
+      <h1 class="pf-title">Designing calm, usable software for people who are busy.</h1>
+      <p class="pf-lede">I'm <strong>Your Name</strong>, a product designer with 6+ years shaping
+        end-to-end experiences — from research and flows to polished, shippable interfaces and the
+        design systems that hold them together.</p>
+      <div class="pf-meta">
+        <span class="pf-pill"><i class="dot"></i> Available for new work</span>
+        <span class="pf-loc">Based in [Your City] · Remote-friendly</span>
+      </div>
+    </section>
+
+    <section class="pf-section pf-wrap" id="work" data-screen-label="Portfolio · Work">
+      <div class="pf-sec-head"><span class="pf-num">01</span><h2>Selected work</h2></div>
+      <div class="pf-grid">
+
+        <article class="pf-case">
+          <image-slot id="work-1" class="pf-thumb" shape="rounded" radius="20" placeholder="Drop project cover"></image-slot>
+          <div class="pf-case-body">
+            <div class="pf-case-top"><span class="pf-num">01</span><span class="pf-year">2025</span></div>
+            <h3>Onboarding that gets users to value</h3>
+            <p class="pf-role">Fintech app · Lead Product Designer</p>
+            <p class="pf-desc">Rebuilt a nine-step signup into a guided three-step flow, with progressive
+              disclosure and a clearer first-run moment.</p>
+            <div class="pf-tags"><span>UX Research</span><span>Flows</span><span>Design System</span></div>
+            <div class="pf-result">+34% activation <em>in six weeks</em></div>
+            <span class="pf-view">View case study →</span>
+          </div>
+        </article>
+
+        <article class="pf-case">
+          <image-slot id="work-2" class="pf-thumb" shape="rounded" radius="20" placeholder="Drop project cover"></image-slot>
+          <div class="pf-case-body">
+            <div class="pf-case-top"><span class="pf-num">02</span><span class="pf-year">2024</span></div>
+            <h3>A scheduling tool that feels calm</h3>
+            <p class="pf-role">SaaS platform · Product Designer</p>
+            <p class="pf-desc">Reframed a dense calendar around a single focused "next action," cutting
+              visual noise while keeping power-user depth.</p>
+            <div class="pf-tags"><span>Interaction</span><span>Prototyping</span><span>UI</span></div>
+            <div class="pf-result">4.7★ <em>post-launch rating</em></div>
+            <span class="pf-view">View case study →</span>
+          </div>
+        </article>
+
+        <article class="pf-case">
+          <image-slot id="work-3" class="pf-thumb" shape="rounded" radius="20" placeholder="Drop project cover"></image-slot>
+          <div class="pf-case-body">
+            <div class="pf-case-top"><span class="pf-num">03</span><span class="pf-year">2024</span></div>
+            <h3>Rethinking checkout for mobile</h3>
+            <p class="pf-role">E-commerce · Senior Designer</p>
+            <p class="pf-desc">Collapsed a multi-page checkout into one adaptive sheet, validated through
+              two rounds of A/B testing and usability sessions.</p>
+            <div class="pf-tags"><span>UX</span><span>A/B Testing</span><span>Accessibility</span></div>
+            <div class="pf-result">−22% drop-off <em>at payment</em></div>
+            <span class="pf-view">View case study →</span>
+          </div>
+        </article>
+
+        <article class="pf-case">
+          <image-slot id="work-4" class="pf-thumb" shape="rounded" radius="20" placeholder="Drop project cover"></image-slot>
+          <div class="pf-case-body">
+            <div class="pf-case-top"><span class="pf-num">04</span><span class="pf-year">2023</span></div>
+            <h3>Building a design system from zero</h3>
+            <p class="pf-role">Internal platform · Design Systems Lead</p>
+            <p class="pf-desc">Stood up tokens, components and documentation that three product teams now
+              ship from — with a contribution model that keeps it alive.</p>
+            <div class="pf-tags"><span>Tokens</span><span>Components</span><span>Docs</span></div>
+            <div class="pf-result">120+ components <em>in production</em></div>
+            <span class="pf-view">View case study →</span>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <section class="pf-section pf-about" id="about" data-screen-label="Portfolio · About">
+      <div class="pf-wrap pf-about-grid">
+        <image-slot id="about-portrait" class="pf-portrait" shape="rounded" radius="26" placeholder="Drop a portrait"></image-slot>
+        <div>
+          <div class="pf-sec-head"><span class="pf-num">02</span><h2>About</h2></div>
+          <p class="pf-about-lede">I help teams turn fuzzy problems into products that feel obvious in
+            the hand — calm, considered, and genuinely usable.</p>
+          <p class="pf-about-body">My background spans research, interaction design and front-end
+            collaboration, so I can move from a messy whiteboard to a working prototype without losing
+            the thread. I care about the small moments — empty states, transitions, error copy — because
+            that's where trust is built.</p>
+          <p class="pf-about-body">Outside of screens you'll find me in the garden, which is probably why
+            my desk looks the way it does.</p>
+          <div class="pf-cols">
+            <div>
+              <h4>What I do</h4>
+              <ul class="pf-list">
+                <li>UX & product strategy</li>
+                <li>User research & testing</li>
+                <li>Interaction & UI design</li>
+                <li>Prototyping</li>
+                <li>Design systems</li>
+              </ul>
+            </div>
+            <div>
+              <h4>Tools</h4>
+              <ul class="pf-list">
+                <li>Figma</li>
+                <li>Framer / ProtoPie</li>
+                <li>Maze & Dovetail</li>
+                <li>HTML / CSS</li>
+                <li>A little code</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="pf-contact pf-wrap" id="contact" data-screen-label="Portfolio · Contact">
+      <div class="pf-sec-head"><span class="pf-num">03</span><h2>Contact</h2></div>
+      <h3 class="pf-cta">Let's build something people love to use.</h3>
+      <a class="pf-email" href="mailto:you@example.com">you@example.com</a>
+      <div class="pf-socials">
+        <a href="#">LinkedIn</a>
+        <a href="#">Dribbble</a>
+        <a href="#">Read.cv</a>
+        <a href="#">X / Twitter</a>
+      </div>
+      <p class="pf-copyright">© 2026 Your Name · Designed in the garden.</p>
+    </footer>
+  </main>
+
+  <!-- Tweaks panel + bridge -->
+  <div id="tweaks-root"></div>
+
+  <!-- user-fillable image placeholders -->
+  <script src="image-slot.js"></script>
+
+  <script type="text/babel" src="tweaks-panel.jsx"></script>
+  <script type="text/babel" src="app.jsx"></script>
+
+  <!-- 3D scene -->
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
