@@ -70,7 +70,6 @@ export interface ComparisonCard {
   title: string;
   body: string;
   image: string;
-  caption?: string;
 }
 
 export interface Decision {
@@ -90,14 +89,12 @@ export const DECISIONS: Decision[] = [
           title: 'The AI Assistant’s main entry point is easy to miss',
           body: 'The AI Assistant’s main entry point “Customize your schedule” has low adoption. Only 19% of attendees used it, and over half said they didn’t even know it existed. Heat map confirmed AI Assistant is one of the least popular click on the home page.',
           image: '/images/case-studies/ms-ai-assistant/decision1-pair1-problem.png',
-          caption: 'CTA is overshadowed by more visually dominant content',
         },
         solution: {
           tag: 'Solution 1',
           title: 'Solution 1: design hierarchy to elevate the AI Assistant as a primary action',
           body: 'I made the entry point feel like a key part of the planning journey. Early usability tests showed increased click-throughs and reduced hesitation time to engage with the AI Assistant.',
           image: '/images/case-studies/ms-ai-assistant/decision1-pair1-solution.png',
-          caption: 'Simple yet persistent CTA that’s visually distinct',
         },
       },
       {
@@ -106,14 +103,12 @@ export const DECISIONS: Decision[] = [
           title: 'The chatbot has no clear value proposition',
           body: 'The chatbot has no clear messaging about what it could do or how it would save time. The AI Assistant never earned their buy-in.',
           image: '/images/case-studies/ms-ai-assistant/decision1-pair2-problem.png',
-          caption: 'The chatbot’s capabilities are unclear, leaving attendees unsure of the next step.',
         },
         solution: {
           tag: 'Solution 2',
           title: 'Solution 2: use persuasive prompts to give attendees a reason to care',
           body: 'The chatbot now surfaces relevant prompts to give attendees a clear starting point. This gave attendees a clear reason to engage and helped them see real value quickly.',
           image: '/images/case-studies/ms-ai-assistant/decision1-pair2-solution.png',
-          caption: 'Clear prompts for solving valuable problems',
         },
       },
     ],
@@ -128,14 +123,12 @@ export const DECISIONS: Decision[] = [
           title: 'Building a schedule was time-consuming and cognitively demanding',
           body: 'Attendees had to browse pages of sessions and add them one-by-one to their schedule. Research confirmed this time-consuming and cognitively-demanding task hurt pre-event satisfaction.',
           image: '/images/case-studies/ms-ai-assistant/decision2-pair1-problem.png',
-          caption: 'Endless browsing and extensive scrolling · Separate clicks create high friction and repetitive task',
         },
         solution: {
           tag: 'Solution 1',
           title: 'Solution 1: automating planning to reduce friction',
           body: 'A full-page AI flow that generates a personalized schedule based on attendee profile. Attendees can review, swap, or add all sessions at once—turning a stressful process into a confident, guided experience.',
           image: '/images/case-studies/ms-ai-assistant/decision2-pair1-solution.png',
-          caption: 'AI justifications ensure best matching choice',
         },
       },
       {
@@ -144,14 +137,12 @@ export const DECISIONS: Decision[] = [
           title: 'Overlapping sessions made planning stressful',
           body: 'Overlapping sessions made planning stressful, and without AI support, resolving conflicts was error-prone. Attendees lacked confidence they picked the right sessions for their specific level, background, or needs.',
           image: '/images/case-studies/ms-ai-assistant/decision2-pair2-problem.png',
-          caption: 'Lacking clear guidance or actionable solutions to decide “which one is better?” or “what should I do?”',
         },
         solution: {
           tag: 'Solution 2',
           title: 'Solution 2: smart conflict resolution that builds confidence',
           body: 'The AI Assistant now recommends the best-fit options with clearing reasoning based on input. Attendees feel confident in their choices and can build a strong schedule in minutes, not hours.',
           image: '/images/case-studies/ms-ai-assistant/decision2-pair2-solution.png',
-          caption: 'Session comparison to simplify decision',
         },
       },
     ],
@@ -166,14 +157,12 @@ export const DECISIONS: Decision[] = [
           title: 'Attendees don’t know who to talk to',
           body: 'Attendees don’t know who to talk to. The current directory provides surface-level info offers no meaningful way to identify relevant people, people are left guessing who’s worth reaching out to.',
           image: '/images/case-studies/ms-ai-assistant/decision3-pair1-problem.png',
-          caption: 'Networking felt random, high-effort, and often unproductive. Hard to identify who’s like-minded or where to start.',
         },
         solution: {
           tag: 'Solution 1',
           title: 'Solution 1: help attendees find “their people”',
           body: 'AI Assistant makes networking no longer a guesswork by surfacing relevant contacts based on shared sessions and background.',
           image: '/images/case-studies/ms-ai-assistant/decision3-pair1-solution.png',
-          caption: 'Tags and shared sessions help quickly assess background fit.',
         },
       },
       {
@@ -182,14 +171,12 @@ export const DECISIONS: Decision[] = [
           title: 'Cold outreach creates a barrier for introverts',
           body: 'The current CTAs to connect require attendees to initiate cold outreach, which majority won’t do. This creates a barrier for introverts and first-timers, who want connection but need help breaking the ice.',
           image: '/images/case-studies/ms-ai-assistant/decision3-pair2-problem.png',
-          caption: 'Lacking visibility into availability or responsiveness · No facilitation to avoid awkward cold start',
         },
         solution: {
           tag: 'Solution 2',
           title: 'Solution 2: facilitate low-pressure networking',
           body: 'Designed structured prompts, conversation starters, or shared group chats based on session attendance or topics of interest. Using real-time context to identify who’s actively open to networking.',
           image: '/images/case-studies/ms-ai-assistant/decision3-pair2-solution.png',
-          caption: 'Improved nudges drove more reach outs.',
         },
       },
     ],
