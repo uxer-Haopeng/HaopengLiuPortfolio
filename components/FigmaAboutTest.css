@@ -1,0 +1,30 @@
+/* Breakpoint visibility for the /figma-about-test page.
+   Desktop (>=1200px) keeps the pixel-exact Figma layout; tablet (768-1199px)
+   and mobile (<768px) are reflowed layouts since Figma only ships a 1440px
+   frame for this design. */
+
+.fat-desktop {
+  display: block;
+}
+.fat-tablet,
+.fat-mobile {
+  display: none;
+}
+
+@media (max-width: 1199px) {
+  .fat-desktop {
+    display: none;
+  }
+  .fat-tablet {
+    display: block;
+  }
+}
+
+@media (max-width: 767px) {
+  .fat-tablet {
+    display: none;
+  }
+  .fat-mobile {
+    display: block;
+  }
+}
