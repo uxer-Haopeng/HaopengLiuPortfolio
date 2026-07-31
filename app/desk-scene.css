@@ -1,0 +1,231 @@
+/* Desk Scene — ported from Claude Design "Desk Scene.html" + portfolio.css.
+   Rules are scoped to .desk-scene-root (and a body/html class the component
+   toggles while mounted) so they never leak onto the other routes. */
+
+html.desk-scene-active,
+body.desk-scene-active {
+  overflow: hidden;
+  height: 100%;
+}
+
+body.desk-scene-active {
+  background: #efe7df;
+  color-scheme: light;
+}
+
+.desk-scene-root,
+.desk-scene-root * {
+  box-sizing: border-box;
+}
+
+#scene { position: fixed; inset: 0; display: block; touch-action: none; }
+#loading {
+  position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 14px; background: #efe7df; z-index: 50;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  color: #8a7f73; letter-spacing: 0.16em; font-size: 12px; text-transform: uppercase;
+  transition: opacity 0.7s ease; pointer-events: none;
+}
+#loading.hidden { opacity: 0; }
+.desk-scene-root .spinner {
+  width: 30px; height: 30px; border-radius: 50%;
+  border: 2px solid #d8cdbf; border-top-color: #8a7f73;
+  animation: dsk-spin 0.9s linear infinite;
+}
+@keyframes dsk-spin { to { transform: rotate(360deg); } }
+
+/* orbit hint */
+#hint {
+  position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
+  font-family: 'Roboto', system-ui, sans-serif;
+  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: #9b9084; background: rgba(255,255,255,0.55); backdrop-filter: blur(8px);
+  padding: 8px 16px; border-radius: 999px; z-index: 20;
+  border: 1px solid rgba(160,148,132,0.18);
+  transition: opacity 0.6s ease, color 0.6s ease, background 0.6s ease, border-color 0.6s ease;
+  pointer-events: none;
+}
+#hint.hidden { opacity: 0; }
+
+/* scroll-to-enter affordance */
+#enterCue {
+  position: fixed; left: 50%; bottom: 64px; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  z-index: 20; pointer-events: none; transition: opacity 0.5s ease, color 0.6s ease;
+  font-family: 'Roboto', system-ui, sans-serif;
+  font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #8d8174;
+}
+#enterCue.hidden { opacity: 0; }
+#enterCue .chev {
+  width: 16px; height: 16px; border-right: 2px solid #b0a290; border-bottom: 2px solid #b0a290;
+  transform: rotate(45deg); animation: dsk-nudge 1.6s ease-in-out infinite;
+  transition: border-color 0.6s ease;
+}
+
+/* time-of-day contrast: bottom affordances swap to light-on-dark once the scene dims */
+body[data-time="dusk"] #hint {
+  color: #f3e6d5; background: rgba(42,30,22,0.45); border-color: rgba(255,206,156,0.25);
+}
+body[data-time="dusk"] #enterCue { color: #eccfa8; }
+body[data-time="dusk"] #enterCue .chev { border-color: #e0b78a; }
+body[data-time="night"] #hint {
+  color: #e2e8f7; background: rgba(18,22,32,0.55); border-color: rgba(198,210,235,0.22);
+}
+body[data-time="night"] #enterCue { color: #c7d0e9; }
+body[data-time="night"] #enterCue .chev { border-color: #a9b6d8; }
+@keyframes dsk-nudge {
+  0%, 100% { transform: rotate(45deg) translate(-2px, -2px); opacity: 0.35; }
+  50% { transform: rotate(45deg) translate(2px, 2px); opacity: 1; }
+}
+
+/* ---------- end-user scene settings: compact one-line bar, top-center ---------- */
+#sceneSettingsDock {
+  position: fixed; top: 16px; left: 50%; transform: translateX(-50%); z-index: 25;
+  display: flex; align-items: center; gap: 12px;
+  background: rgba(250,246,240,0.9); backdrop-filter: blur(12px);
+  border: 1px solid rgba(58,51,43,0.1); border-radius: 999px;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset, 0 14px 28px -16px rgba(74,58,42,0.5);
+  font-family: 'Roboto', system-ui, sans-serif;
+  padding: 7px 14px; max-width: calc(100vw - 32px);
+}
+.ss-divider { width: 1px; height: 18px; background: rgba(58,51,43,0.14); flex: none; }
+.ss-dock-body {
+  display: flex; align-items: center; gap: 12px;
+  font-family: 'Roboto', system-ui, sans-serif;
+}
+.ss-group { display: flex; align-items: center; gap: 6px; }
+.ss-group h4 {
+  font-size: 9px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700;
+  color: #a89c8a; margin: 0; white-space: nowrap;
+}
+.ss-options { display: flex; gap: 4px; }
+.ss-option {
+  display: flex; flex-direction: row; align-items: center; gap: 4px;
+  border: 1px solid rgba(58,51,43,0.1); background: #fff; cursor: pointer;
+  border-radius: 999px; padding: 5px 9px; white-space: nowrap;
+  font-family: 'Roboto', system-ui, sans-serif; font-size: 9.5px; font-weight: 500; color: #5d5446;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.ss-option:hover { background: #fdf9f3; }
+.ss-option svg { width: 15px; height: 15px; flex: none; filter: drop-shadow(0 1px 1.5px rgba(40,30,20,0.3)); transition: transform 0.15s ease; }
+.ss-option.active { border-color: #6ba878; background: #e8f3eb; color: #3a332b; font-weight: 700; }
+
+/* Back button tooltip */
+.pf-back { position: relative; }
+.pf-back::after {
+  content: 'Return to desk';
+  position: absolute;
+  bottom: -36px;
+  left: -12px;
+  background: rgba(58, 51, 43, 0.9);
+  color: #f5f5f0;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: 'Roboto', system-ui, sans-serif;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 100;
+}
+.pf-back:hover::after {
+  opacity: 1;
+}
+
+/* Hide Framer branding */
+#portfolio iframe + * { display: none !important; }
+#portfolio [data-framer-component-type="Badge"] { display: none !important; }
+
+/* =========================================================================
+   portfolio.css — clay-styled UX designer portfolio living inside the monitor
+   ========================================================================= */
+
+#portfolio {
+  --bg: #efe7df;
+  --surface: #f7f1e9;
+  --card: #f3ece1;
+  --ink: #3a332b;
+  --ink-soft: #5d5446;
+  --muted: #8b8072;
+  --line: rgba(58, 51, 43, 0.12);
+  --line-soft: rgba(58, 51, 43, 0.07);
+  --accent: #c0764f;
+  --accent-soft: #e3a886;
+  --sage: #869068;
+
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Hanken Grotesk", system-ui, sans-serif;
+  font-size: 17px;
+  line-height: 1.6;
+  opacity: 0;
+  pointer-events: none;
+  transform-origin: 50% 40%;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+#portfolio.active { pointer-events: auto; }
+
+#portfolio ::selection { background: var(--accent-soft); color: #fff; }
+
+/* scrollbar */
+#portfolio { scrollbar-width: thin; scrollbar-color: #cdbfac transparent; }
+#portfolio::-webkit-scrollbar { width: 10px; }
+#portfolio::-webkit-scrollbar-thumb { background: #cdbfac; border-radius: 99px; border: 3px solid var(--bg); }
+
+#portfolio h1, #portfolio h2, #portfolio h3 {
+  font-family: "Instrument Serif", Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.04;
+}
+
+.pf-mono {
+  font-family: "Space Mono", ui-monospace, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 12px;
+}
+
+.pf-back {
+  font-family: "Space Mono", monospace;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  background: #fbf7f0;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 9px 16px;
+  cursor: pointer;
+  transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.7) inset, 0 8px 18px -14px rgba(74, 58, 42, 0.6);
+}
+.pf-back:hover { transform: translateX(-2px); background: #fff; box-shadow: 0 10px 22px -14px rgba(74, 58, 42, 0.7); }
+.pf-back-floating {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 10;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+#portfolio.active .pf-back-floating {
+  opacity: 1;
+  pointer-events: auto;
+}
+#framer-embed {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: var(--bg);
+}

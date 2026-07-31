@@ -1,0 +1,47 @@
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: #f6ecd6;
+}
+
+body {
+  overscroll-behavior: none;
+  font-family: var(--font-karla), sans-serif;
+  color: #fdf6e3;
+}
+
+a {
+  color: #a8762f;
+}
+
+a:hover {
+  color: #6d4c1d;
+}
+
+@keyframes hintBob {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translateY(10px);
+    opacity: 0.45;
+  }
+}
+
+@keyframes softIn {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
