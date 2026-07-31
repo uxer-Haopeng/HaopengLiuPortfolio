@@ -51,8 +51,8 @@ function HeroHeading() {
   return (
     <>
       <p style={{ position: "absolute", left: 427, top: 279, margin: 0, fontFamily: HOLTWOOD, fontWeight: 400, fontSize: 100, lineHeight: 1.2, color: "#000", whiteSpace: "nowrap" }}>Hi there!</p>
-      <p style={{ position: "absolute", left: 188, top: 399, margin: 0, fontFamily: HOLTWOOD, fontWeight: 400, fontSize: 100, lineHeight: 1.2, color: "#000", whiteSpace: "nowrap" }}>{"I’m Haopeng Liu"}</p>
       <img src={`${A}/highlight-28.svg`} alt="" style={{ position: "absolute", left: 471, top: 446, width: 508, height: 48 }} />
+      <p style={{ position: "absolute", left: 188, top: 399, margin: 0, fontFamily: HOLTWOOD, fontWeight: 400, fontSize: 100, lineHeight: 1.2, color: "#000", whiteSpace: "nowrap" }}>{"I’m Haopeng Liu"}</p>
 
       <div style={{ position: "absolute", left: 77, top: 178, width: 182.225, height: 185.318, display: "flex", alignItems: "center", justifyContent: "center" }}>
         <div style={{ width: 147, height: 142, transform: "rotate(70.94deg)" }}>
@@ -157,8 +157,8 @@ function PersonalityCard({
     <div style={{ position: "absolute", left, top, width, height, background: bg, borderRadius: 40, overflow: "hidden" }}>
       <div style={{ position: "absolute", left: iconBgLeft, top: 20, width: 80, height: 80, background: iconBg, border: iconBorder ? `1px solid ${iconBorder}` : undefined, borderRadius: 12, boxSizing: "border-box" }} />
       <img src={`${A}/${icon}`} alt="" style={{ position: "absolute", left: iconLeft, top: 38, width: 44, height: 44, objectFit: "cover" }} />
-      <p style={{ position: "absolute", left: 0, top: 132, width: "100%", margin: 0, fontFamily: ROBOTO, fontWeight: 700, fontSize: 40, lineHeight: 1.2, color: "#fff", textAlign: "center" }}>{title}</p>
-      <div style={{ position: "absolute", left: 0, top: 260, width: "100%", fontFamily: ROBOTO, fontWeight: 200, fontSize: 20, lineHeight: 1.2, color: "#f3f3f3", textAlign: "center" }}>
+      <p style={{ position: "absolute", left: "50%", top: 132, width: 212, margin: 0, transform: "translateX(-50%)", fontFamily: ROBOTO, fontWeight: 700, fontSize: 40, lineHeight: 1.2, color: "#fff", textAlign: "center" }}>{title}</p>
+      <div style={{ position: "absolute", left: "50%", top: 260, width: 212, transform: "translateX(-50%)", fontFamily: ROBOTO, fontWeight: 200, fontSize: 20, lineHeight: 1.2, color: "#f3f3f3", textAlign: "center" }}>
         {desc.map((d, i) => (
           <p key={i} style={{ margin: 0 }}>{d}</p>
         ))}
