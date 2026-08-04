@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { Cormorant_Garamond, Karla, Holtwood_One_SC, Roboto } from 'next/font/google';
 import './globals.css';
 import './desk-scene.css';
+import { GA_MEASUREMENT_ID } from '@/lib/analytics/config';
+import GoogleAnalyticsPageview from '@/lib/analytics/GoogleAnalyticsPageview';
 
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
@@ -41,20 +43,25 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${cormorant.variable} ${karla.variable} ${holtwood.variable} ${roboto.variable}`}>
       <head>
-        {/* Google Analytics (GA4) — replace G-XXXXXXXXXX with your Measurement ID */}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX" />
+        {/* Google Analytics (GA4) — Measurement ID lives in lib/analytics/config.ts.
+            send_page_view is off here; GoogleAnalyticsPageview below fires the
+            pageview for every route, including the first one. */}
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`} />
         <script
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              gtag('config', 'G-XXXXXXXXXX', { page_title: 'Haopeng Liu Portfolio' });
+              gtag('config', '${GA_MEASUREMENT_ID}', { send_page_view: false });
             `,
           }}
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <GoogleAnalyticsPageview />
+        {children}
+      </body>
     </html>
   );
 }

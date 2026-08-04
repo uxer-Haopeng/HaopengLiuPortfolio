@@ -6,6 +6,15 @@ import DeskSceneController from '@/lib/deskScene/DeskSceneController';
 type Garden = 'color' | 'clay' | 'painterly';
 type TimeOfDay = 'day' | 'dusk' | 'night';
 
+const FRAMER_EMBED_URL = 'https://haopeng.framer.website/';
+const FIGMA_PROTOTYPE_URL =
+  'https://www.figma.com/proto/1jLoIfx2YorTzOWLJSJj9I/Portfolio?node-id=301-508&viewport=173%2C203%2C0.05&t=eVqxQzQXOoQoCNsZ-1&scaling=min-zoom&content-scaling=fixed&page-id=301%3A413';
+const FIGMA_EMBED_URL = `https://www.figma.com/embed?embed_host=share&url=${encodeURIComponent(FIGMA_PROTOTYPE_URL)}`;
+// Some public/corporate wifi filters silently block the framer.website domain
+// (the request just hangs, no error event) — if it hasn't loaded within this
+// window, fall back to the Figma prototype embed instead.
+const EMBED_FALLBACK_TIMEOUT_MS = 7000;
+
 export default function DeskHero() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const portfolioRef = useRef<HTMLDivElement | null>(null);
@@ -13,9 +22,27 @@ export default function DeskHero() {
   const hintRef = useRef<HTMLDivElement | null>(null);
   const loadingRef = useRef<HTMLDivElement | null>(null);
   const controllerRef = useRef<DeskSceneController | null>(null);
+  const embedFallbackTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [garden, setGarden] = useState<Garden>('color');
   const [timeOfDay, setTimeOfDay] = useState<TimeOfDay>('day');
+  const [embedSrc, setEmbedSrc] = useState(FRAMER_EMBED_URL);
+
+  useEffect(() => {
+    embedFallbackTimerRef.current = setTimeout(() => {
+      setEmbedSrc(FIGMA_EMBED_URL);
+    }, EMBED_FALLBACK_TIMEOUT_MS);
+    return () => {
+      if (embedFallbackTimerRef.current) clearTimeout(embedFallbackTimerRef.current);
+    };
+  }, []);
+
+  const handleEmbedLoad = () => {
+    if (embedFallbackTimerRef.current) {
+      clearTimeout(embedFallbackTimerRef.current);
+      embedFallbackTimerRef.current = null;
+    }
+  };
 
   useEffect(() => {
     document.documentElement.classList.add('desk-scene-active');
@@ -79,10 +106,11 @@ export default function DeskHero() {
         </button>
         <iframe
           id="framer-embed"
-          src="https://haopeng.framer.website/"
+          src={embedSrc}
           title="Haopeng &middot; Portfolio"
           loading="eager"
           referrerPolicy="no-referrer-when-downgrade"
+          onLoad={handleEmbedLoad}
         />
       </main>
 
