@@ -1,0 +1,1 @@
+.fat-desktop{display:block}.fat-mobile,.fat-tablet{display:none}@media (max-width:1199px){.fat-desktop{display:none}.fat-tablet{display:block}}@media (max-width:767px){.fat-tablet{display:none}.fat-mobile{display:block}}
